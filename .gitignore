@@ -2,3 +2,5 @@ tmp/*
 !tmp/.gitkeep
 venv
 out.png
+output/*
+!output/.gitkeep

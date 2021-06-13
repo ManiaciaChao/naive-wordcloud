@@ -27,8 +27,8 @@ words_dict = {} # word cloud input
 
 with open(book_path,"r",encoding="utf8") as f:
     for line in f.readlines():
-        if all(line.find(e) >= 0 for e in keywords):
-            words = filter(lambda x: x not in stopwords_set, jieba.cut(line.strip()))
+        if any(line.find(e) >= 0 for e in keywords):
+            words = filter(lambda x: x not in stopwords_set and x not in keywords, jieba.cut(line.strip()))
             for word in words:
                 if word not in words_dict:
                     words_dict[word] = 1
@@ -37,9 +37,9 @@ with open(book_path,"r",encoding="utf8") as f:
 
 word=WordCloud(
     background_color="white",
-    max_font_size=100,
+    max_font_size=40,
     min_font_size=10,
-    max_words=30,
+    max_words=1000,
     random_state=50,
     font_path=font_path,
 )
