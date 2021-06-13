@@ -15,6 +15,7 @@ stopwords_path = "./input/stopwords.txt"
 stopwords_set = set(line.strip()
                     for line in open(stopwords_path, "r", encoding="utf8"))
 
+
 class DoubanCrawler:
     def __init__(self):
         self.headers = {
@@ -27,8 +28,7 @@ class DoubanCrawler:
         self.words_dict = {}  # word cloud input
 
     def info_crawl(self, name, keywords, bg_image=None):
-        name_str = self.__handle_name(name)
-        text_list = []
+        name_str = self.__handle_name(name)  # url encodeded
         self.book_search_url += name_str
         self.book_url, num_str = self.__find_url(self.book_search_url)
         for i in range(0, 10):
@@ -42,7 +42,7 @@ class DoubanCrawler:
                 line = ct.text.strip()
                 if any(line.find(e) >= 0 for e in keywords):
                     words = filter(lambda x: x not in stopwords_set,
-                                   jieba.cut(line.strip()))
+                                   jieba.cut(line))
                     for word in words:
                         if word not in self.words_dict:
                             self.words_dict[word] = 1
@@ -50,9 +50,9 @@ class DoubanCrawler:
                             self.words_dict[word] += 1
 
         self.__comment_to_txt(name, comment_list)
-        self.__plot_wordcloud(name, bg_image)
+        self.__plot_wordcloud(name)
 
-    def __plot_wordcloud(self, name, bg_image=None):
+    def __plot_wordcloud(self, name):
         print("plot wordcloud...")
         word_cloud = WordCloud(
             scale=10,
